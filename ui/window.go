@@ -30,8 +30,9 @@ type Visualizer struct {
 	tx   chan screen.Texture
 	done chan struct{}
 
-	sz  size.Event
-	pos image.Rectangle
+	sz          size.Event
+	pos         image.Rectangle
+	crossCenter image.Point
 }
 
 func (pw *Visualizer) Main() {
@@ -39,6 +40,8 @@ func (pw *Visualizer) Main() {
 	pw.done = make(chan struct{})
 	pw.pos.Max.X = 200
 	pw.pos.Max.Y = 200
+	pw.crossCenter.X = WindowWidth / 2
+	pw.crossCenter.Y = WindowHeight / 2
 	driver.Main(pw.run)
 }
 
@@ -122,10 +125,13 @@ func (pw *Visualizer) handleEvent(e any, t screen.Texture) {
 
 	case mouse.Event:
 		if t == nil {
-			// TODO: Реалізувати реакцію на натискання кнопки миші.
-		}
-		if e.Button == mouse.ButtonLeft {
-
+			if e.Button == mouse.ButtonLeft && e.Direction == mouse.DirPress {
+				pw.crossCenter = image.Point{
+					int(e.X),
+					int(e.Y),
+				}
+				pw.w.Send(paint.Event{})
+			}
 		}
 
 	case paint.Event:
@@ -143,7 +149,11 @@ func (pw *Visualizer) handleEvent(e any, t screen.Texture) {
 func (pw *Visualizer) drawDefaultUI() {
 	pw.w.Fill(pw.sz.Bounds(), color.White, draw.Src) // Фон.
 
-	// TODO: Змінити колір фону та додати відображення фігури у вашому варіанті.
+	x, y := pw.crossCenter.X, pw.crossCenter.Y
+	c := color.RGBA{255, 255, 0, 1}
+
+	pw.w.Fill(image.Rect(x-200, y+80, x+200, y-80), c, draw.Src)
+	pw.w.Fill(image.Rect(x-80, y+200, x+80, y-200), c, draw.Src)
 
 	// Малювання білої рамки.
 	for _, br := range imageutil.Border(pw.sz.Bounds(), 10) {
