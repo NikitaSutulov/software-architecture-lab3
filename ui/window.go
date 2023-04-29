@@ -31,15 +31,12 @@ type Visualizer struct {
 	done chan struct{}
 
 	sz          size.Event
-	pos         image.Rectangle
 	crossCenter image.Point
 }
 
 func (pw *Visualizer) Main() {
 	pw.tx = make(chan screen.Texture)
 	pw.done = make(chan struct{})
-	pw.pos.Max.X = 200
-	pw.pos.Max.Y = 200
 	pw.crossCenter.X = WindowWidth / 2
 	pw.crossCenter.Y = WindowHeight / 2
 	driver.Main(pw.run)
