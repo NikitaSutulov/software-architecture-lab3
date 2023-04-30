@@ -4,7 +4,7 @@ import (
 	"image"
 	"sync"
 
-	"golang.org/x/exp/shiny/screen"	
+	"golang.org/x/exp/shiny/screen"
 )
 
 // Receiver отримує текстуру, яка була підготовлена в результаті виконання команд у циелі подій.
@@ -54,7 +54,10 @@ func (l *Loop) Post(op Operation) {
 
 // StopAndWait сигналізує
 func (l *Loop) StopAndWait() {
-	l.Post(OperationFunc(func(screen.Texture) { l.stopReq = true }))
+	l.Post(OperationFunc(func(screen.Texture) {
+		l.stopReq = true
+	}))
+	<-l.stopped
 }
 
 // TODO: реалізувати власну чергу повідомлень.
