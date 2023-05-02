@@ -31,8 +31,6 @@ func (l *Loop) Start(s screen.Screen) {
 	l.next, _ = s.NewTexture(size)
 	l.prev, _ = s.NewTexture(size)
 
-	// TODO: ініціалізувати чергу подій.
-	// TODO: запустити рутину обробки повідомлень у черзі подій.
 	l.stopped = make(chan struct{})
 	go func() {
 		for !l.stopReq || !l.mq.empty() {
