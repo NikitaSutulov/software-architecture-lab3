@@ -19,7 +19,7 @@ type Loop struct {
 	next screen.Texture // текстура, яка зараз формується
 	prev screen.Texture // текстура, яка була відправленя останнього разу у Receiver
 
-	mq      messageQueue
+	Mq      MessageQueue
 	stopped chan struct{}
 	stopReq bool
 }
@@ -33,8 +33,8 @@ func (l *Loop) Start(s screen.Screen) {
 
 	l.stopped = make(chan struct{})
 	go func() {
-		for !l.stopReq || !l.mq.empty() {
-			op := l.mq.pull()
+		for !l.stopReq || !l.Mq.Empty() {
+			op := l.Mq.Pull()
 			update := op.Do(l.next)
 			if update {
 				l.Receiver.Update(l.next)
@@ -47,7 +47,7 @@ func (l *Loop) Start(s screen.Screen) {
 
 // Post додає нову операцію у внутрішню чергу.
 func (l *Loop) Post(op Operation) {
-	l.mq.push(op)
+	l.Mq.Push(op)
 }
 
 // StopAndWait сигналізує
@@ -58,39 +58,39 @@ func (l *Loop) StopAndWait() {
 	<-l.stopped
 }
 
-type messageQueue struct {
-	ops     []Operation
+type MessageQueue struct {
+	Ops     []Operation
 	mu      sync.Mutex
 	blocked chan struct{}
 }
 
-func (mq *messageQueue) push(op Operation) {
+func (mq *MessageQueue) Push(op Operation) {
 	mq.mu.Lock()
 	defer mq.mu.Unlock()
-	mq.ops = append(mq.ops, op)
+	mq.Ops = append(mq.Ops, op)
 	if mq.blocked != nil {
 		close(mq.blocked)
 		mq.blocked = nil
 	}
 }
 
-func (mq *messageQueue) pull() Operation {
+func (mq *MessageQueue) Pull() Operation {
 	mq.mu.Lock()
 	defer mq.mu.Unlock()
-	for len(mq.ops) == 0 {
+	for len(mq.Ops) == 0 {
 		mq.blocked = make(chan struct{})
 		mq.mu.Unlock()
 		<-mq.blocked
 		mq.mu.Lock()
 	}
-	op := mq.ops[0]
-	mq.ops[0] = nil
-	mq.ops = mq.ops[1:]
+	op := mq.Ops[0]
+	mq.Ops[0] = nil
+	mq.Ops = mq.Ops[1:]
 	return op
 }
 
-func (mq *messageQueue) empty() bool {
+func (mq *MessageQueue) Empty() bool {
 	mq.mu.Lock()
 	defer mq.mu.Unlock()
-	return len(mq.ops) == 0
+	return len(mq.Ops) == 0
 }
