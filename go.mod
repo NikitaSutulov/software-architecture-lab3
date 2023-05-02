@@ -1,4 +1,4 @@
-module github.com/NikitaSutulov/software-architecture-lab-3
+module github.com/NikitaSutulov/software-architecture-lab3
 
 go 1.20
 
