@@ -2,6 +2,8 @@
 
 Підготували студенти групи ІМ-12 Сутулов Нікіта, Назаренко Олександр та Колосов Сергій.
 
+[![Go](https://github.com/NikitaSutulov/software-architecture-lab3/actions/workflows/go.yml/badge.svg)](https://github.com/NikitaSutulov/software-architecture-lab3/actions/workflows/go.yml)
+
 У корені розміщено файл components.pdf, це діаграма залежностей компонентів проєкту. З неї видно, що вона є ациклічним графом.
 
 __Як запускати:__
