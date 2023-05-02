@@ -60,7 +60,6 @@ func (l *Loop) StopAndWait() {
 	<-l.stopped
 }
 
-// TODO: реалізувати власну чергу повідомлень.
 type messageQueue struct {
 	ops     []Operation
 	mu      sync.Mutex
