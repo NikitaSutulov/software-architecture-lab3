@@ -60,7 +60,7 @@ func (u *Uistate) GreenBackground() {
 }
 
 func (u *Uistate) WhiteBackground() {
-	u.backgroundColor = painter.OperationFunc(painter.GreenFill)
+	u.backgroundColor = painter.OperationFunc(painter.WhiteFill)
 }
 
 func (u *Uistate) BackgroundRectangle(firstPoint image.Point, secondPoint image.Point) {
