@@ -1,4 +1,4 @@
-package tests
+package lang
 
 import (
 	"image"
@@ -7,7 +7,6 @@ import (
 
 	// Importing painter and lang packages.
 	"github.com/NikitaSutulov/software-architecture-lab3/painter"
-	"github.com/NikitaSutulov/software-architecture-lab3/painter/lang"
 
 	// Package assert provides some helpful methods for testing, like for asserting equality or inequality.
 	"github.com/stretchr/testify/assert"
@@ -98,7 +97,7 @@ func Test_parse_struct(t *testing.T) {
 		// Running subtest for each test case.
 		t.Run(tc.name, func(t *testing.T) {
 			// Creating an instance of the parser.
-			parser := &lang.Parser{}
+			parser := &Parser{}
 			// Parsing the command using the parser.
 			ops, err := parser.Parse(strings.NewReader(tc.command))
 			// If the expected operation is nil, we expect an error.
@@ -142,7 +141,7 @@ func Test_parse_func(t *testing.T) {
 	}
 
 	// Create a new parser
-	parser := &lang.Parser{}
+	parser := &Parser{}
 
 	// Iterate through the list of test cases
 	for _, tc := range tests {

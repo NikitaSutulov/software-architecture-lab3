@@ -1,20 +1,18 @@
-package tests
+package painter
 
 import (
 	"testing"
-
-	"github.com/NikitaSutulov/software-architecture-lab3/painter"
 )
 
 func TestMessageQueueEmpty(t *testing.T) {
-	mq := &painter.MessageQueue{}
+	mq := &MessageQueue{}
 	if !mq.Empty() {
 		t.Errorf("expected empty message queue, got non-empty")
 	}
 }
 
 func TestMessageQueuePush(t *testing.T) {
-	mq := &painter.MessageQueue{}
+	mq := &MessageQueue{}
 	op1 := new(MockOperation)
 	mq.Push(op1)
 	if mq.Empty() {
@@ -23,7 +21,7 @@ func TestMessageQueuePush(t *testing.T) {
 }
 
 func TestMessageQueuePull(t *testing.T) {
-	mq := &painter.MessageQueue{}
+	mq := &MessageQueue{}
 	op1 := new(MockOperation)
 	mq.Push(op1)
 	op2 := mq.Pull()
